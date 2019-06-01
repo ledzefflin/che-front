@@ -1,0 +1,11 @@
+* text eol=auto
+*.js text eol=lf
+*.vue text eol=lf
+*.json text eol=lf
+
+*.png binary
+*.jpg binary
+*.ttf  binary
+*.woff2 binary
+*.woff binary
+*.otf binary
