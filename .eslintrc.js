@@ -3,18 +3,18 @@ module.exports = {
 
   parserOptions: {
     parser: 'babel-eslint',
-    sourceType: 'module'
+    sourceType: 'module',
   },
 
   env: {
-    browser: true
+    browser: true,
   },
 
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
     'plugin:vue/essential',
-    '@vue/standard'
+    '@vue/standard',
   ],
 
   // required to lint *.vue files
@@ -24,12 +24,12 @@ module.exports = {
     ga: true, // Google Analytics
     cordova: true,
     __statics: true,
-    process: true
+    process: true,
   },
 
   // add your custom rules here
   rules: {
-    'max-len': [1, 80],
+    'max-len': [0, 80],
     quotes: [2, 'single'],
     semi: [2, 'always'],
     'comma-dangle': [1, 'never'], // 댕글링 콤마 설정
@@ -43,7 +43,7 @@ module.exports = {
     'operator-linebreak': [
       2,
       'before',
-      { overrides: { '+=': 'none', '-=': 'none', '=': 'ignore' } }
+      { overrides: { '+=': 'none', '-=': 'none', '=': 'ignore' } },
     ],
     indent: [2, 2],
     // allow debugger during development
@@ -65,10 +65,20 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+    '@vue/html-self-closing': 'on',
 
     // allow console.log during development only
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-  }
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+  },
+  globals: {
+    R: true,
+    _: true,
+    $c: true,
+    $u: true,
+    $vue: true,
+    $store: true,
+    $router: true,
+  },
 };

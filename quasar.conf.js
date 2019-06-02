@@ -1,10 +1,12 @@
-// Configuration for your app
+const path = require('path');
+const webpack = require('webpack');
 
+// Configuration for your app
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    boot: ['axios'],
+    boot: ['axios', 'lodash', 'customExtend'],
 
     css: ['app.styl'],
 
@@ -50,6 +52,7 @@ module.exports = function (ctx) {
     build: {
       scopeHoisting: true,
       vueRouterMode: 'history',
+      publicPath: '.',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
@@ -60,7 +63,23 @@ module.exports = function (ctx) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /node_modules/
-        })
+        });
+
+        cfg.plugins.push(
+          new webpack.ProvidePlugin({
+            $vue: ['vue/dist/vue.esm.js', 'default'],
+            _: 'lodash',
+            $c: ['$c', 'default'],
+            $u: ['$u', 'default'],
+            R: 'ramda'
+          })
+        );
+
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          $c: path.resolve(__dirname, './src/common/index'),
+          $u: path.resolve(__dirname, './src/common/utils/index')
+        };
       }
     },
 
@@ -147,5 +166,5 @@ module.exports = function (ctx) {
         // appId: 'quasar-app'
       }
     }
-  }
+  };
 };
