@@ -1,7 +1,9 @@
 import classes from '@/common/classes/index';
-import utils from '@/common/utils/index';
+import utilsIndex from '@/common/utils/index';
 
 export default {
   classes,
-  utils
+  utils: utilsIndex.utils,
+  storeHelper: utilsIndex.storeHelper,
+  naming: utilsIndex.naming,
 };

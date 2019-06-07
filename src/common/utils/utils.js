@@ -1,5 +1,3 @@
-import Dic from '../classes/Dic';
-
 const throwError = (...args) => {
   _.forEach(args, arg => {
     const isError = arg instanceof Error;
@@ -27,8 +25,8 @@ export const getDiff = (obj, base) => {
  * @param {Promise} Promise
  * @returns {Boolean} Promise 여부
  */
-export const isPromise = fn => {
-  return !_.isNil(fn) && _.isFunction(fn.then);
+export const isPromise = p => {
+  return !_.isNil(p) && _.isFunction(p.then);
 };
 
 /**
@@ -42,7 +40,7 @@ export const promisify = (fn, ...args) => {
   const getPromise = _.cond([
     [(f, ...a) => _.isFunction(f), (f, ...a) => Promise.resolve(f(...a))],
     [(f, ...a) => isPromise(f), (f, ...a) => f],
-    [_.stubTrue, (f, ...a) => Promise.resolve(f)]
+    [_.stubTrue, (f, ...a) => Promise.resolve(f)],
   ]);
   const promise = getPromise(fn, ...args);
 
@@ -67,7 +65,7 @@ export const flowAsync = (...fns) => (...args) =>
 
         return curResult;
       } catch (e) {
-        throwError(e);
+        return throwError(e);
       }
     },
     Promise.resolve(...args)
@@ -100,7 +98,12 @@ export const promiseAll = (...args) => {
     : throwError('arguments should not be empty.');
 };
 
-export const createDic = o => new Dic(o);
+export const tap = (...args) => {
+  const tapLog = (...args) =>
+    !_.isEqual(process.env.NODE_ENV, 'production')
+    && console.log('%c[tap]:', 'color: #4286f4', ...args);
+  return _.tap(...args, tapLog);
+};
 
 export default {
   getDiff,
@@ -108,5 +111,4 @@ export default {
   promisify,
   flowAsync,
   promiseAll,
-  createDic
 };

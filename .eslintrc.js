@@ -4,10 +4,13 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
     sourceType: 'module',
+    ecmaVersion: 6,
   },
 
   env: {
     browser: true,
+    es6: true,
+    node: true,
   },
 
   extends: [
@@ -15,6 +18,7 @@ module.exports = {
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
     'plugin:vue/essential',
     '@vue/standard',
+    'plugin:prettier/recommended',
   ],
 
   // required to lint *.vue files
@@ -32,7 +36,7 @@ module.exports = {
     'max-len': [0, 80],
     quotes: [2, 'single'],
     semi: [2, 'always'],
-    'comma-dangle': [1, 'never'], // 댕글링 콤마 설정
+    'comma-dangle': [1, 'only-multiline'], // 댕글링 콤마 설정
     // allow async-await
     'generator-star-spacing': 'off',
     // 대입없는 표현식 금지 (비활성).
@@ -55,6 +59,7 @@ module.exports = {
     // allow paren-less arrow functions
     'arrow-parens': [2, 'as-needed'],
     'one-var': 'off',
+    'space-before-function-paren': 1,
 
     'import/first': 'off',
     'import/named': 'error',
@@ -66,19 +71,29 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
     '@vue/html-self-closing': 'on',
-
+    'no-unused-vars': [1, { 'vars': 'all', 'args': 'none', 'caughtErros': 'none' }],
+    'standard/computed-property-even-spacing': 0,
     // allow console.log during development only
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'prettier/prettier': [
+      'off',
+      {},
+      {
+        fileInfoOptions: {
+          withNodeModules: 'off',
+        },
+      },
+    ],
   },
   globals: {
     R: true,
     _: true,
-    $c: true,
-    $u: true,
+    $g: true,
     $vue: true,
     $store: true,
     $router: true,
+    $q: true,
   },
 };

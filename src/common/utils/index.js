@@ -1,4 +1,9 @@
 import naming from '@/common/utils/naming';
+import storeHelper from '@/common/utils/storeHelper';
 import utils from '@/common/utils/utils';
 
-export default _.assign(utils, { naming: naming });
+export default {
+  naming,
+  storeHelper,
+  utils,
+};

@@ -98,38 +98,36 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import { get, sync, call, commit, registerModule } from 'vuex-pathify';
-import vuexModule from '@/store/dynamic-modules/layouts/myLayout';
+import getVuexModule from '@/store/dynamic-modules/layouts/myLayout';
 import { openURL } from 'quasar';
 
 const thisPath = 'layouts/MyLayout';
-const thisName = $u.naming.vueComponent(thisPath);
-const moduleName = $u.naming.vuexModule(thisPath);
+const thisName = $g.naming.vueComponent(thisPath);
+const moduleName = $g.naming.vuexModule(thisPath);
 const getMember = () => ({
   computed: {
-    ...get('spinner', ['spinner']),
     ...get(`${moduleName}/*`),
-    ...sync(`${moduleName}/*`)
+    ...sync(`${moduleName}/*`),
   },
   methods: {
-    ...call(`${moduleName}/*`)
-  }
+    ...call(`${moduleName}/*`),
+  },
 });
 
 export default {
   name: thisName,
-  extends: registerModule(moduleName, vuexModule, getMember),
+  preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext }) {},
+  extends: registerModule(_.split(moduleName, '/'), getVuexModule(), getMember),
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
     };
   },
   methods: {
-    openURL
+    openURL,
   },
-  created () {
-  }
+  created () {},
 };
 </script>
 
-<style>
-</style>
+<style scoped></style>
