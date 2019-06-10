@@ -5,10 +5,10 @@
 // eslint-disable-next-line no-unused-vars
 import { get, sync, call, commit, registerModule } from 'vuex-pathify';
 
-const thisPath = 'template';
+const thisPath = 'AuthCallback';
 // eslint-disable-next-line no-unused-vars
 const thisName = $g.naming.vueComponent(thisPath);
-const moduleName = $g.naming.vuexModule(thisPath);
+const moduleName = $g.naming.vuexModule('oidcModule');
 const getMember = () => ({
   computed: {
     ...get(`${moduleName}/*`),
@@ -37,6 +37,7 @@ export default {
   },
   extends: registerModule(_.split(moduleName, '/'), module, getMember),
   components: {},
+  methods: {},
   created () {},
 };
 </script>

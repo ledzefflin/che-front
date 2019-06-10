@@ -1,26 +1,25 @@
-import { pascalCase, normalizePath } from '@/boot/lodash';
+import { pascalCase } from '@/boot/lodash';
 
 export const naming = (() => {
-  const normalize = _.normalizePath || normalizePath;
   const pascal = _.pascalCase || pascalCase;
 
   const vueComponent = path => {
-    return _.flow(
-      normalize,
-      pascal
-    )(path);
+    const splited = _.split(path, '/');
+    return _.join(splited.push(pascal(splited.pop())), '/');
   };
 
   const vuexModule = path => {
-    return _.flow(
-      normalize,
-      _.camelCase
-    )(path);
+    const splited = _.split(path, '/');
+    const last = _.camelCase(_.last(splited));
+
+    splited.pop();
+    splited.push(last);
+    return splited.length > 1 ? _.join(splited, '/') : _.head(splited);
   };
 
   return {
     vueComponent,
-    vuexModule
+    vuexModule,
   };
 })();
 
