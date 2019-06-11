@@ -1,16 +1,24 @@
-const throwError = (...args) => {
+/**
+ *
+ * @param  {Error|String} args
+ */
+export const throwError = (...args) => {
   _.forEach(args, arg => {
-    const isError = arg instanceof Error;
-    isError
-      ? (() => {
-        throw arg;
-      })()
-      : (() => {
-        throw new Error(arg);
-      })();
+    const isError = _.isError(arg);
+
+    if (isError) {
+      throw arg;
+    } else {
+      throw new Error(arg);
+    }
   });
 };
 
+/**
+ *
+ * @param {Object} obj
+ * @param {Object} base
+ */
 export const getDiff = (obj, base) => {
   return _.transform(obj, (result, v, k) => {
     !_.isEqual(v, base[k])
@@ -98,14 +106,19 @@ export const promiseAll = (...args) => {
     : throwError('arguments should not be empty.');
 };
 
+/**
+ *
+ * @param  {...any} args
+ */
 export const tap = (...args) => {
   const tapLog = (...args) =>
     !_.isEqual(process.env.NODE_ENV, 'production')
-    && console.log('%c[tap]:', 'color: #4286f4', ...args);
+    && console.info('%c[tap]:', 'color: #4286f4', ...args);
   return _.tap(...args, tapLog);
 };
 
 export default {
+  throwError,
   getDiff,
   isPromise,
   promisify,
