@@ -1,12 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import pathify from '@/common/config/pathifySettings';
-
+import pathify from '@/common/config/pathify';
 
 Vue.use(Vuex);
 
-export default (/* { ssrContext } */) => {
+export default ((/* { ssrContext } */) => {
   const staticModuleFiles = require.context('./static-modules', true, /\.js$/);
   const dynamicModuleFiles = require.context(
     './dynamic-modules',
@@ -39,4 +38,4 @@ export default (/* { ssrContext } */) => {
     strict: !_.isEqual(process.env.NODE_ENV, 'production'),
   });
   return Store;
-};
+})();

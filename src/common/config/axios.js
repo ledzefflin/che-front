@@ -5,7 +5,7 @@ import {
 } from '@/common/config/axios-extensions';
 import axios from '@/common/config/axios';
 
-export const setUpAxios = () => {
+export const setup = () => {
   const baseUrl = '';
   const http = axios.create({
     baseURL: baseUrl,
@@ -18,7 +18,7 @@ export const setUpAxios = () => {
     ),
   });
 
-  http.defaults.paramSerializer = params => {
+  http.defaults.paramSerializer = (params) => {
     return qs.stringify(params, {
       arrayFormat: 'repeat',
     });
@@ -28,4 +28,7 @@ export const setUpAxios = () => {
   http.interceptors.response.use(); // 응답 interceptors
 };
 
-export default setUpAxios;
+
+export default {
+  setup
+};

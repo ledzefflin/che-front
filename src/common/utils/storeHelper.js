@@ -1,8 +1,8 @@
-const getAbsPath = path => _.replace(path, /\.\//, '');
-const getAbsKeys = absPath => _.split(absPath, '/');
-const getAbsFileName = path => _.replace(path, /(\.\/|\.js$)/g, '');
-const folderFilter = absKeys =>
-  _.filter(absKeys, key => !_.includes(key, '.js'));
+const getAbsPath = (path) => _.replace(path, /\.\//, '');
+const getAbsKeys = (absPath) => _.split(absPath, '/');
+const getAbsFileName = (path) => _.replace(path, /(\.\/|\.js$)/g, '');
+const folderFilter = (absKeys) =>
+  _.filter(absKeys, (key) => !_.includes(key, '.js'));
 
 const getFileNames = _.flow(
   getAbsPath,
@@ -13,9 +13,9 @@ const getFolderNames = _.flow(
   folderFilter
 );
 
-export const getFolderModules = files => {
-  const getKeys = files => files.keys();
-  const getModules = keys =>
+export const getFolderModules = (files) => {
+  const getKeys = (files) => files.keys();
+  const getModules = (keys) =>
     _.reduce(
       keys,
       (acc, key) => {
@@ -76,7 +76,7 @@ export const getFolderModules = files => {
 
 export const getFileModules = (files, staticFolderModules, exceptes = []) => {
   const getKeys = (files, exceptes) =>
-    _.filter(files.keys(), k => !_.includes(exceptes, k));
+    _.filter(files.keys(), (k) => !_.includes(exceptes, k));
   const getFolderModule = _.curry((folderNames, staticFolderModules) =>
     _.reduce(
       folderNames,
@@ -84,8 +84,8 @@ export const getFileModules = (files, staticFolderModules, exceptes = []) => {
       staticFolderModules
     )
   );
-  const getTargetName = moduleName => _.camelCase(getAbsFileName(moduleName));
-  const getDefault = d =>
+  const getTargetName = (moduleName) => _.camelCase(getAbsFileName(moduleName));
+  const getDefault = (d) =>
     _.isFunction(d) ? d() : _.isObject(d) ? d : _.isNil(d) || {};
   const isRoot = _.curry((folderModule, staticFolderModules) =>
     _.isEqual(folderModule, staticFolderModules)
@@ -104,7 +104,7 @@ export const getFileModules = (files, staticFolderModules, exceptes = []) => {
       const checkRoot = isRoot(folderModule)(staticFolderModules); // root여부
       const register = _.cond([
         [
-          checkRoot => checkRoot,
+          (checkRoot) => checkRoot,
           (checkRoot, folderModule, lastFileName, fileDefault) => {
             folderModule[lastFileName] = _.assign(
               { namespaced: true },
@@ -138,11 +138,11 @@ export const getFileModules = (files, staticFolderModules, exceptes = []) => {
         _.flow(
           getFolderNames,
           getFolderModule,
-          f => f(acc),
+          (f) => f(acc),
           setFileDefault,
-          f => f(acc),
-          f => f(getDefault(files(key)['default'])),
-          f => f(key)
+          (f) => f(acc),
+          (f) => f(getDefault(files(key)['default'])),
+          (f) => f(key)
         )(key);
 
         return acc;
@@ -156,7 +156,51 @@ export const getFileModules = (files, staticFolderModules, exceptes = []) => {
   return fileModules;
 };
 
+/**
+ * Helper function to generate a mixin that registers module and computed properties on component creation
+ *
+ * @param   {string|Array}  path        The path to register the Vuex module on
+ * @param   {object}        module      The module definition to register when the
+ * @param   {function}      callback    A callback returning store members to be added to the component definition
+ * @param   {object}       [options]    Optional Vuex module registration options
+ * @returns {object}                    The mixin
+ */
+export const registerModule = function (path, module, callback, options) {
+  const getFilteredPath = (store, path) =>
+    !_.isNil(store.state) && Array.isArray(path)
+      ? _.filter(path, (p) => _.isEmpty(store.state[p]))
+      : _.isEmpty(store.state[path])
+        ? path
+        : '';
+
+  return {
+    beforeCreate () {
+      const self = this;
+      const filteredPath = getFilteredPath(self.$store, path);
+
+      !_.isEmpty(filteredPath)
+        && self.$store.registerModule(path, module, options);
+
+      const members = callback();
+
+      self.$options.computed = Object.assign(
+        self.$options.computed || {},
+        members.computed || {}
+      );
+      self.$options.methods = Object.assign(
+        self.$options.methods || {},
+        members.methods || {}
+      );
+    },
+
+    destoyed () {
+      self.$store.unregisterModule(path);
+    },
+  };
+};
+
 export default {
+  registerModule,
   getFileModules,
   getFolderModules,
 };

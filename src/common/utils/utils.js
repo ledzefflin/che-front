@@ -3,7 +3,7 @@
  * @param  {Error|String} args
  */
 export const throwError = (...args) => {
-  _.forEach(args, arg => {
+  _.forEach(args, (arg) => {
     const isError = _.isError(arg);
 
     if (isError) {
@@ -33,7 +33,7 @@ export const getDiff = (obj, base) => {
  * @param {Promise} Promise
  * @returns {Boolean} Promise 여부
  */
-export const isPromise = p => {
+export const isPromise = (p) => {
   return !_.isNil(p) && _.isFunction(p.then);
 };
 
@@ -82,32 +82,30 @@ export const flowAsync = (...fns) => (...args) =>
 /**
  * Promise.All Helper 함수.
  *
- * @param  {[Promise|Function|any]} args 호출할 함수 | Promise | Any
+ * @param  {[Promise|Function|any]} fns 호출할 함수 | Promise | Any
  * @returns 인자 함수의 결과값 배열을 반환하는 Promise 함수 반환.
  */
-export const promiseAll = (...args) => {
+export const promiseAll = (...fns) => {
   const promises = _.reduce(
-    ...args,
-    (acc, arg) => _.concat(acc, promisify(arg)),
+    ...fns,
+    (acc, f) => _.concat(acc, promisify(f)),
     []
   );
 
   return !_.isEmpty(promises)
-    && _.every(promises, promise => isPromise(promise))
+    && _.every(promises, (promise) => isPromise(promise))
     ? Promise.all(promises)
-      .catch(
-        e =>
-          !_.isEqual(process.env.NODE_ENV, 'production')
-            && (() => {
-              throw new Error(e);
-            })()
-      )
-      .finally(_.constant({}))
-    : throwError('arguments should not be empty.');
+      .catch((e) => {
+        if (!_.isEqual(process.env.NODE_ENV, 'production')) {
+          throw new Error(e);
+        }
+      })
+      .finally(_.constant([]))
+    : throwError('functions should not be empty.');
 };
 
 /**
- *
+ * 탭
  * @param  {...any} args
  */
 export const tap = (...args) => {
@@ -117,6 +115,29 @@ export const tap = (...args) => {
   return _.tap(...args, tapLog);
 };
 
+/**
+ * 로그
+ * @param  {...any} args
+ */
+export const log = (...args) => {
+  !_.isEqual(process.env.NODE_ENV, 'production')
+    && console.info('%c[che]:', 'color: #21ba45', ...args);
+};
+
+export const alt = _.curry((val, fn1, fn2) => fn1(val) || fn2(val));
+export const seq= _.curry((val, ...fns) => _.forEach([...fns], (fn) => fn(val)));
+export const join = _.curry((val, join, fn1, fn2) => join(fn1(val), fn2(val)));
+export const predict = (predict, fn1 = _.stubTrue, fn2 = _.stubFalse) => {
+  const isTrue = (p) =>
+    _.isBoolean(p)
+      ? p
+      : _.isFunction(p)
+        ? p()
+        : !!p;
+
+  return  isTrue(predict) ? fn1() : fn2();
+};
+
 export default {
   throwError,
   getDiff,
@@ -124,4 +145,11 @@ export default {
   promisify,
   flowAsync,
   promiseAll,
+  tap,
+  log,
+  alt,
+  seq,
+  join,
+  predict
+  
 };

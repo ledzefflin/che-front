@@ -1,12 +1,15 @@
 import { make } from 'vuex-pathify';
 import produce from 'immer';
 
-const thisPath = 'globalModule'; // '@/store/dynamic-modules' 기준으로 상대경로 (template, static-modules 제외)
+const thisPath = 'global'; // '@/store/dynamic-modules' 기준으로 상대경로 (template, static-modules 제외)
 // eslint-disable-next-line no-unused-vars
 const thisName = $g.naming.vuexModule(thisPath);
 const initialState = {
   isProduction: _.isEqual(process.env.NODE_ENV, 'production'),
   isSSR: process.env.SERVER,
+  user: {
+    isLogin: false
+  },
   apiState: {
     callCounter: 0,
   },

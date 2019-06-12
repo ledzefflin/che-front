@@ -34,7 +34,7 @@ export const Dic = class {
   }
 
   values () {
-    const getValues = self =>
+    const getValues = (self) =>
       _.reduce(
         self._lenses,
         (acc, lens) => _.concat(acc, R.view(lens, self)),
@@ -59,7 +59,7 @@ export const Dic = class {
         },
         {}
       );
-    const getDic = o => new Dic(o);
+    const getDic = (o) => new Dic(o);
     const getNewDic = _.flow([getObj, getDic]);
     const newDic = getNewDic(fn, this);
     return newDic;
@@ -78,7 +78,7 @@ export const Dic = class {
         },
         {}
       );
-    const getDic = o => new Dic(o);
+    const getDic = (o) => new Dic(o);
     const getNewDic = _.flow([getObj, getDic]);
     const newDic = getNewDic(fn, this);
     return newDic;

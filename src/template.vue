@@ -3,7 +3,8 @@
 </template>
 <script>
 // eslint-disable-next-line no-unused-vars
-import { get, sync, call, commit, registerModule } from 'vuex-pathify';
+import { get, sync, call, commit } from 'vuex-pathify';
+// import getVuexModule from '@/store/dynamic-modules/somePath';
 
 const thisPath = 'template';
 // eslint-disable-next-line no-unused-vars
@@ -35,7 +36,7 @@ export default {
     $q.Loading.hide();
     // return store.dispatch('fetchItem', currentRoute.params.id)
   },
-  extends: registerModule(_.split(moduleName, '/'), module, getMember),
+  extends: $g.storeHelper.registerModule(_.split(moduleName, '/'), getVuexModule(), getMember),
   components: {},
   created () {},
 };

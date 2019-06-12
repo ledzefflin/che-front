@@ -17,7 +17,7 @@ export const Tuple = class {
       });
       const checkValid = _.cond([
         [
-          (vals, typeInfos) => _.some(vals, v => _.isNil(v)),
+          (vals, typeInfos) => _.some(vals, (v) => _.isNil(v)),
           (vals, typeInfos) =>
             $g.utils.throwError(
               new ReferenceError(`Tuple can not be null or undefined : ${vals}`)
@@ -42,13 +42,13 @@ export const Tuple = class {
         Object.freeze(self);
 
         self.values = () => {
-          return _.chain(_.keys(self)).map(k => self[k]);
+          return _.chain(_.keys(self)).map((k) => self[k]);
         };
       });
 
       const handler = _.flow(
         checkValid,
-        isValid => isValid && setter(values, self)
+        (isValid) => isValid && setter(values, self)
       );
 
       handler(values, typeInfos);

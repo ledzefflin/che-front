@@ -57,9 +57,10 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow paren-less arrow functions
-    'arrow-parens': [2, 'as-needed'],
+    'arrow-parens': [2, 'always'],
     'one-var': 'off',
     'space-before-function-paren': 1,
+    'no-return-await': 0,
 
     'import/first': 'off',
     'import/named': 'error',
