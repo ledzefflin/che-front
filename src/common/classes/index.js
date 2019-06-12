@@ -3,5 +3,5 @@ import Tuple from '@/common/classes/Tuple';
 
 export default {
   Dic,
-  Tuple
+  Tuple,
 };

@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 
 import pathify from '@/common/config/pathifySettings';
 
-
 Vue.use(Vuex);
 
 export default (/* { ssrContext } */) => {

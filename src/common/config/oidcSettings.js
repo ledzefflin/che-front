@@ -8,7 +8,7 @@ export const setUpOidc = () => ({
   scope: 'openid profile email che-api',
   post_logout_redirect_uri: 'http://localhost:8080',
   filterProtocolClaims: true,
-  loadUserInfo: true
+  loadUserInfo: true,
 });
 
 export default setUpOidc;

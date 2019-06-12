@@ -23,7 +23,7 @@
     "quasar": "^1.0.0-rc.4",
     "ramda": "^0.26.1",
     "ramda-fantasy": "^0.8.0",
-    "vuex-pathify": "ledzefflin/vuex-pathify#f4e0ac9"
+    "vuex-pathify": "ledzefflin/vuex-pathify#a1204d9"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0-rc.6",
