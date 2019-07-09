@@ -33,8 +33,8 @@ export const getDiff = (obj, base) => {
  * @param {Promise} Promise
  * @returns {Boolean} Promise 여부
  */
-export const isPromise = (p) => {
-  return !_.isNil(p) && _.isFunction(p.then);
+export const isPromise = (fn) => {
+  return !_.isNil(fn) && _.isFunction(fn.then) && _.isFunction(fn.catch);
 };
 
 /**
@@ -112,6 +112,7 @@ export const tap = (...args) => {
   const tapLog = (...args) =>
     !_.isEqual(process.env.NODE_ENV, 'production')
     && console.info('%c[tap]:', 'color: #4286f4', ...args);
+
   return _.tap(...args, tapLog);
 };
 
@@ -151,5 +152,5 @@ export default {
   seq,
   join,
   predict
-  
+
 };
