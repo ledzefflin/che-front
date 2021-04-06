@@ -17,6 +17,7 @@ const getMember = () => ({
   },
   methods: {
     ...call(`${moduleName}/*`),
+
   },
 });
 
@@ -38,6 +39,11 @@ export default {
   },
   extends: $g.storeHelper.registerModule(_.split(moduleName, '/'), getVuexModule(), getMember),
   components: {},
+  methods: {
+    resetData() {
+      Object.assign(this.$data, _.omit(excludes, this.$options.data.apply(this)));
+    }
+  },
   created () {},
 };
 </script>
